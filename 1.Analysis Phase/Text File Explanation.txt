@@ -1,0 +1,79 @@
+1.	Client Scenario
+We here analyze the Scenario from the client about the system, that’s responsible for handling the reservation of train tickets including employees, tickets, tickets types, employees, passengers, services.
+
+We have passengers with some data about each one including, First Name, Last Name, Phone Numbers, ID, Age, Date of Birth, and Gender.
+
+Trains information like Train ID, Train Type, Information about the trib like the time, and stations of leaving and reaching, and the number of seats as total.
+
+Tickets information like the train, payment information, Ticket Price, seat number, number of the ticket, and the type of the ticket. Also, each ticket is for only one seat.
+
+Each ticket type has special services in food, drinking, and other privileges, and each train has all the levels of all tickets. Also, each ticket type has its own explanation of the advantages.
+
+We need to keep track of each payment the passenger do for the tickets he books, also the employees were responsible for the booking for this passenger. Employees have the same information as passengers including also, including the shift of work, address, and salary. There’s also a supervisor for each group of employees.
+
+We need to keep track of the method of payment, also the discount if there’s one, and the total price. Also, keep track of the payment of each ticket with the same payment number.
+
+2.	 Main Entities
+Strong Entities (Have Unique Attributes)
+1.	Employees
+2.	Passengers
+3.	Trains
+4.	Tickets Types
+5.	Services
+6.	Payments
+
+Weak Entities (Depend on Other Entities)
+1. Tickets
+2. Seats
+
+3.	 Entities Attributes
+Employees
+Simple/Single (ID, Date of Birth, Gender, Salary, Role)
+Multi-Valued (Phone Number) 
+Composite (Name -> (First Name, Last Name), 
+Work Shift -> (Start Time, End Time), Address -> (#Block, Street, City)) 
+Derived (Age)
+
+Tickets Types
+Simple/Single (ID, Type Name, Description)
+Services
+Simple/Single (ID, Service Name, Explanation)
+
+Passengers
+Simple/Single (ID, Date of Birth, Gender)
+Multi-Valued (Phone Number) 
+Composite (Name -> (First Name, Last Name)) 
+Derived (Age)
+
+Trains
+Simple/Single (Train ID, Train Type, Train Stopping Stations)
+Composite (Trib Time -> (Departure Time, Arrival Time)) 
+Derived (Number of Seats, Number of Seats Available, Trib Time)
+
+Seats
+Simple/Single (Seat Number, Row,  Column, Cart, Seat Type)
+
+Payments
+Simple/Single (Payment Number, Method, Discount, Total Price,
+                           Payment Date, Payment Time)
+Derived (Payment Amount)
+
+Tickets
+Simple/Single (Ticket Number, Waiting Station, Waiting Date, Waiting Time, Ticket Price)
+
+4.	 Entities Relationships
+       We will talk about each relationship in this format
+Entities (Degree of Relation, Cardinality Ratio, Participation, Attributes)
+
+1. Employees, Payments (Binary, 1 to Many, May Must)
+2. Supervisors, Employees (Binary, 1 to Many, May May)
+3. Employees, Tickets (Binary, 1 to Many, May Must)
+4. Passengers, Tickets (Binary, 1 to Many, Must Must)
+5. Passengers, Payments (Binary, 1 to Many, Must Must)
+6. Seats, Tickets (Binary, 1 to 1, May Must)
+7. Trains, Seats (Binary, 1 to Many, Must Must)
+8. Trains, Tickets (Binary, 1 to Many, May Must)
+9. Payments, and Tickets (Binary, 1 to Many, Must Must)
+10. Tickets Types, Services (Binary, Many to Many, May Must)
+11. Tickets Types, Trains (Binary, Many to Many, May Must)
+12. Tickets Types, and Tickets (Binary, 1 to Many, May Must)

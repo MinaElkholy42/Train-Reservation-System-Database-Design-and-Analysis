@@ -1,0 +1,12 @@
+DROP TABLE TICKETS; 
+DROP TABLE PAYMENTS;
+DROP TABLE Employees_Phones; 
+DROP TABLE Employees; 
+DROP TABLE Ticket_Types_Trains; 
+DROP TABLE Tickets_Types_Services; 
+DROP TABLE SEATS;
+DROP TABLE TRAINS;
+DROP TABLE SERVICES; 
+DROP TABLE Tickets_Types; 
+DROP TABLE Passengers_Phones; 
+DROP TABLE Passengers;

@@ -1,0 +1,75 @@
+-- GET DATA OF EACH PASSEGNER (MAIN DATA) WITH THE TOTAL PRICE OF PAYMENT ORDER FROM MAX TO MIN WITH MORE THAN 0 OF PAYMENT 
+
+SELECT P.PASSENGER_ID, P.PASSENGER_FIRST_NAME || ' ' || P.PASSENGER_LAST_NAME "Passenger Full Name", NVL(SUM(PAY.TOTAL_PRICE - PAY.DISCOUNT), 0) "Actual Payment"
+
+FROM PAYMENTS PAY RIGHT OUTER JOIN PASSENGERS P 
+ON PAY.PASSENGER_ID = P.PASSENGER_ID
+GROUP BY  P.PASSENGER_ID, P.PASSENGER_FIRST_NAME || ' ' || P.PASSENGER_LAST_NAME
+HAVING NVL(SUM(PAY.TOTAL_PRICE - PAY.DISCOUNT), 0) > 0
+ORDER BY NVL(SUM(PAY.TOTAL_PRICE - PAY.DISCOUNT), 0) DESC;
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- GET MOST USED TICKET TYPE (ACCORDING TO THE PASSENGERS BOOKING) 
+
+SELECT TT.TYPE_NAME, DESCRIPTION, TEMP.TYPES_COUNT
+FROM 
+(SELECT T.TYPE_ID, COUNT(T.TYPE_ID) TYPES_COUNT FROM TICKETS T GROUP BY T.TYPE_ID) TEMP, TICKETS_TYPES TT 
+WHERE TT.TYPE_ID = TEMP.TYPE_ID
+ORDER BY TEMP.TYPES_COUNT DESC
+FETCH FIRST 1 ROWS ONLY;
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+-- GET EMPLOYEES WITH SALARY MORE THAN THE AVERAGE OF ALL OTHER EMPLOYEES 
+
+SELECT EMPLOYEE_ID, EMPLOYEE_FIRST_NAME || ' ' || EMPLOYEE_LAST_NAME "Employee Full Name", SALARY, DATE_OF_BIRTH, GENDER, EMPLOYEE_ROLE, WORK_START_TIME, WORK_END_TIME 
+
+FROM EMPLOYEES WHERE SALARY  > (SELECT AVG(SALARY) FROM EMPLOYEES);
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+-- GET PASSENGER DATA WITH THE LARGEST DISCOUNT OF PAYMENTS 
+
+SELECT P.PASSENGER_ID, P.PASSENGER_FIRST_NAME || ' ' || P.PASSENGER_LAST_NAME "Passenger Full Name", P.DATE_OF_BIRTH, P.GENDER, PAY.DISCOUNT
+FROM PASSENGERS P , 
+(SELECT PASSENGER_ID, SUM(DISCOUNT) DISCOUNT FROM PAYMENTS GROUP BY PASSENGER_ID) PAY 
+WHERE P.PASSENGER_ID = PAY.PASSENGER_ID 
+ORDER BY DISCOUNT DESC 
+FETCH FIRST 1 ROWS ONLY; 
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+-- NUMBER OF SEATS IN EACH TRAIN 
+
+SELECT T.TRAIN_ID, T.TRAIN_TYPE, T.TRAIN_STOPPING_STATIONS, S.NUMBER_OF_SEATS
+FROM TRAINS T,
+(SELECT TRAIN_ID, COUNT(TRAIN_ID) NUMBER_OF_SEATS FROM SEATS GROUP BY TRAIN_ID) S 
+
+WHERE T.TRAIN_ID = S.TRAIN_ID ORDER BY NUMBER_OF_SEATS DESC;
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- GET EMPLOYEES NAMES AND IDS WITH THEIR NAMES AND IDS OF SUPERVISORS 
+
+SELECT E.EMPLOYEE_ID "Employee ID",  E.EMPLOYEE_FIRST_NAME || ' ' || E.EMPLOYEE_LAST_NAME "Employee Full Name"
+, SUP.EMPLOYEE_ID "Supervisor ID",  SUP.EMPLOYEE_FIRST_NAME || ' ' || SUP.EMPLOYEE_LAST_NAME "Supervisor Full Name"
+FROM EMPLOYEES E, EMPLOYEES SUP 
+WHERE E.SUPERVISOR_ID = SUP.EMPLOYEE_ID;
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- GET THE NUMBER OF HOURS OF EACH TRAIN THAT TAKES MORE THAN OR 10 HOURS AHEAD
+
+SELECT TRAIN_ID, TRAIN_TYPE, TRAIN_STOPPING_STATIONS, 
+EXTRACT (HOUR FROM (TRIB_ARRIVAL_TIME - TRIB_DEPRATURE_TIME)) "NUMBER OF HOURS" FROM TRAINS
+WHERE EXTRACT (HOUR FROM (TRIB_ARRIVAL_TIME - TRIB_DEPRATURE_TIME)) >= 10;
+
